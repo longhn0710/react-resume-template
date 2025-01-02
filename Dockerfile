@@ -1,27 +1,18 @@
-# Stage 1: Build stage
 FROM node:18-alpine AS build
 WORKDIR /app
 
-# Copy package.json and yarn.lock
 COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Cài đặt các dependency, bao gồm TypeScript
-RUN yarn install --production --frozen-lockfile
-RUN yarn add typescript --dev
-
-# Copy các file còn lại
-COPY . .
-
-# Build ứng dụng trong chế độ production
-RUN yarn build --production
+# Sao chép tất cả các tệp nguồn và build ứng dụng trong cùng một layer
+COPY . . 
+RUN yarn build
 
 # Stage 2: Production stage
 FROM node:18-alpine
 WORKDIR /app
+
+# Sao chép tất cả các tệp đã build từ stage 1 và cài đặt các dependencies chỉ cho production trong cùng một layer
 COPY --from=build /app /app
+RUN yarn install --production && rm -rf /app/src
 
-# Cài đặt dependencies chỉ cho môi trường production
-RUN yarn install --production
-
-# Clean up
-RUN rm -rf /app/src
