@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest  # Sử dụng runner mặc định Ubuntu
 
     env:
-      AWS_REGION: "ap-southeast-1"       # Thay thế bằng vùng AWS của bạn
       INSTANCE_ID: ${{ secrets.INSTANCE_ID }} # Instance ID từ GitHub Secrets
 
     steps:
@@ -25,7 +24,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: $AWS_REGION
+        aws-region: "ap-southeast-1"
 
     - name: Run AWS SSM Command
       id: send-ssm-command
