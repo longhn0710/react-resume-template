@@ -1,0 +1,42 @@
+name: Run AWS SSM Command on Commit
+
+on:
+  push:
+    branches:
+      - main  # Chạy khi có commit mới trên nhánh 'main'
+
+jobs:
+  run-aws-ssm-command:
+    runs-on: ubuntu-latest  # Sử dụng runner mặc định Ubuntu
+
+    env:
+      AWS_REGION: "ap-southeast-1"       # Thay thế bằng vùng AWS của bạn
+      INSTANCE_ID: ${{ secrets.INSTANCE_ID }} # Instance ID từ GitHub Secrets
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Check AWS CLI Version
+      run: aws --version
+
+    - name: Configure AWS CLI
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: $AWS_REGION
+
+    - name: Run AWS SSM Command
+      id: send-ssm-command
+      run: |
+        COMMAND_ID=$(aws ssm send-command \
+          --instance-ids $INSTANCE_ID \
+          --document-name "AWS-RunShellScript" \
+          --parameters commands='["bash /home/ssm-user/run_log.sh"]' \
+          --query "Command.CommandId" \
+          --output text)
+        echo "COMMAND_ID=$COMMAND_ID" >> $GITHUB_ENV
+
+    - name: Output Command ID
+      run: echo "The Command ID is: $COMMAND_ID"
