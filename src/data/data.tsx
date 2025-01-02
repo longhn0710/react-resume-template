@@ -76,8 +76,8 @@ export const heroData: Hero = {
       Dedicated DevOps Engineer with 2 years of experience in deploying, managing, and securing applications on cloud and on-premise platforms. Eager to apply my skills in DevOps field to contribute to the success of company, focusing on innovation and operational excellence 
       </p>
       <p className="prose-sm text-stone-200 sm:prose-base lg:prose-lg">
-        In my free time, you can find me training in <strong className="text-stone-100">Muay Thai</strong>, 
-        playing my <strong className="text-stone-100">banjo</strong>, or exploring the beautiful <strong className="text-stone-100">Vancouver Island</strong>.
+        In my free time, you can find me training in <strong className="text-stone-100">League Client</strong>, 
+        playing my <strong className="text-stone-100">life</strong>, or exploring the beautiful <strong className="text-stone-100">Vancouver Island</strong>.
       </p>
     </>
   ),
